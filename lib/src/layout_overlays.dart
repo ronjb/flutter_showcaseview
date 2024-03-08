@@ -64,12 +64,14 @@ class AnchoredOverlay extends StatelessWidget {
         return OverlayBuilder(
           showOverlay: showOverlay,
           overlayBuilder: (overlayContext) {
-            // If `context` isn't mounted, just return `SizedBox()`.
-            if (!context.mounted) return const SizedBox();
-
             // To calculate the "anchor" point we grab the render box of
             // our parent Container and then we find the center of that box.
-            final box = context.findRenderObject() as RenderBox;
+            late RenderBox box;
+            try {
+              box = context.findRenderObject() as RenderBox;
+            } catch (e) {
+              return const SizedBox();
+            }
 
             final topLeft = box.size.topLeft(
               box.localToGlobal(
